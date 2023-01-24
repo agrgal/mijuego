@@ -1,5 +1,5 @@
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile0`, function (sprite, location) {
-    music.wawawawaa.play()
+    music.jumpUp.play()
     game.showLongText("Terminaste. Has conseguido " + info.score() + "Puntos", DialogLayout.Full)
     game.over(true)
 })
@@ -64,6 +64,8 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
 controller.left.onEvent(ControllerButtonEvent.Repeated, function () {
     Bola.vy = 0
 })
+let VYenemy = 0
+let VXenemy = 0
 let coche: Sprite = null
 let bala: Sprite = null
 let Bola: Sprite = null
@@ -85,14 +87,18 @@ Bola.setPosition(70, 120)
 tiles.setCurrentTilemap(tilemap`nivel1`)
 tiles.placeOnTile(Bola, tiles.getTileLocation(8, 15))
 scene.cameraFollowSprite(Bola)
+game.showLongText("¡Hola! Este juego se llama \"METABOLA\" Una nave en forma de bola debe ir por la carretera desde la zona inferior hasta la meta (zona roja). La nave se mueve con los cursores. Deja pulsado para mantener el rumbo. Al iniciar el juego tienes 2000 puntos. Si abandonas la carretera empezarás a perder puntos. Los monstruos enemigos aparecerán por la pantalla. Si te toca un enemigo perderás 50 puntos. Si disparas y matas un enemigo sumarás 100. Se dispara con la barra espaciadora. ¿Llegarás a la meta? ¿Con cuántos puntos? Si te quedas a cero, pierdes.", DialogLayout.Bottom)
 game.onUpdateInterval(1000, function () {
     coche = sprites.create(assets.image`mipropio`, SpriteKind.Enemy)
     coche.changeScale(0.2, ScaleAnchor.Middle)
     tiles.placeOnRandomTile(coche, assets.tile`myTile`)
-    coche.setVelocity(randint(-1 * maxV, maxV), randint(-1 * maxV, maxV))
+    VXenemy = Bola.vx * -1 + randint(-1, 1)
+    VYenemy = Bola.vy * -1 + randint(-1, 1)
+    coche.setVelocity(VXenemy, VYenemy)
 })
 forever(function () {
     if (info.score() <= 0) {
+        music.wawawawaa.play()
         game.showLongText("Lo siento. Te has quedado sin puntos", DialogLayout.Full)
         game.over(false)
     }
